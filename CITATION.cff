@@ -1,0 +1,18 @@
+cff-version: 1.2.0
+message: "Please cite this repository when reusing the workflow."
+title: "Diffusion MRI: MRtrix3 and FSL single-subject workflow"
+version: 1.0.0
+date-released: 2026-07-24
+authors:
+  - family-names: "Andrade Rey"
+    given-names: "Rene"
+    orcid: "https://orcid.org/0000-0001-5627-579X"
+repository-code: "https://github.com/andraderenew/diffusion-mri_mrtrix3_fsl_single_subject"
+license: MIT
+keywords:
+  - diffusion MRI
+  - DTI
+  - tractography
+  - MRtrix3
+  - FSL
+  - neuroimaging
