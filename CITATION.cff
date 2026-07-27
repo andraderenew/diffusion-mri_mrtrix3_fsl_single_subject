@@ -1,14 +1,17 @@
 cff-version: 1.2.0
-message: "Please cite this repository when reusing the workflow."
 title: "Diffusion MRI: MRtrix3 and FSL single-subject workflow"
-version: 1.0.0
-date-released: 2026-07-24
+message: "If you use this project, please cite it as below."
+type: software
 authors:
   - family-names: "Andrade Rey"
     given-names: "Rene"
     orcid: "https://orcid.org/0000-0001-5627-579X"
+abstract: "Reproducible single-subject diffusion MRI workflow combining MRtrix3 and FSL for preprocessing, tensor metrics, constrained spherical deconvolution, tractography, SIFT filtering, quantitative summaries, and visual quality control."
+license: "MIT"
 repository-code: "https://github.com/andraderenew/diffusion-mri_mrtrix3_fsl_single_subject"
-license: MIT
+url: "https://github.com/andraderenew/diffusion-mri_mrtrix3_fsl_single_subject"
+version: "1.0.1"
+date-released: "2026-07-27"
 keywords:
   - diffusion MRI
   - DTI
