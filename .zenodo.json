@@ -9,7 +9,10 @@
   "title": "Diffusion MRI: MRtrix3 and FSL single-subject workflow",
   "description": "Reproducible single-subject diffusion MRI workflow combining MRtrix3 and FSL for preprocessing, tensor metrics, constrained spherical deconvolution, tractography, SIFT filtering, quantitative summaries, and visual quality control.",
   "version": "1.0.2",
+  "upload_type": "software",
   "access_right": "open",
+  "license": "mit",
+  "language": "eng",
   "keywords": [
     "diffusion MRI",
     "DTI",
@@ -19,7 +22,12 @@
     "constrained spherical deconvolution",
     "neuroimaging"
   ],
-  "license": "mit",
-  "upload_type": "software",
-  "language": "eng"
+  "notes": "Completed reproducible neuroimaging portfolio workflow.",
+  "related_identifiers": [
+    {
+      "identifier": "https://github.com/andraderenew/diffusion-mri_mrtrix3_fsl_single_subject",
+      "relation": "isSupplementTo",
+      "resource_type": "software"
+    }
+  ]
 }
