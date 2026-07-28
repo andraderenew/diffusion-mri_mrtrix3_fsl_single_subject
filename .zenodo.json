@@ -1,0 +1,25 @@
+{
+  "creators": [
+    {
+      "name": "Andrade Rey, Rene",
+      "orcid": "0000-0001-5627-579X",
+      "type": "ProjectMember"
+    }
+  ],
+  "title": "Diffusion MRI: MRtrix3 and FSL single-subject workflow",
+  "description": "Reproducible single-subject diffusion MRI workflow combining MRtrix3 and FSL for preprocessing, tensor metrics, constrained spherical deconvolution, tractography, SIFT filtering, quantitative summaries, and visual quality control.",
+  "version": "1.0.2",
+  "access_right": "open",
+  "keywords": [
+    "diffusion MRI",
+    "DTI",
+    "tractography",
+    "MRtrix3",
+    "FSL",
+    "constrained spherical deconvolution",
+    "neuroimaging"
+  ],
+  "license": "mit",
+  "upload_type": "software",
+  "language": "eng"
+}

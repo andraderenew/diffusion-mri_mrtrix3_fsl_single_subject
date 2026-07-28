@@ -10,12 +10,13 @@ abstract: "Reproducible single-subject diffusion MRI workflow combining MRtrix3 
 license: "MIT"
 repository-code: "https://github.com/andraderenew/diffusion-mri_mrtrix3_fsl_single_subject"
 url: "https://github.com/andraderenew/diffusion-mri_mrtrix3_fsl_single_subject"
-version: "1.0.1"
-date-released: "2026-07-27"
+version: "1.0.2"
+date-released: "2026-07-28"
 keywords:
-  - diffusion MRI
-  - DTI
-  - tractography
-  - MRtrix3
-  - FSL
-  - neuroimaging
+  - "diffusion MRI"
+  - "DTI"
+  - "tractography"
+  - "MRtrix3"
+  - "FSL"
+  - "constrained spherical deconvolution"
+  - "neuroimaging"
