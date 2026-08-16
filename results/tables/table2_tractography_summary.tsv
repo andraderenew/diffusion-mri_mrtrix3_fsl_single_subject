@@ -1,7 +1,7 @@
 measure	value
 initial_streamlines	500000
 sift_streamlines	189356
-display_streamlines	20000
+display_streamlines	800
 sift_mu	0.0295905
 algorithm	iFOD2
 minimum_length_mm	10

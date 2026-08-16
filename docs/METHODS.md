@@ -39,7 +39,7 @@ Whole-brain probabilistic tractography was generated with the iFOD2 algorithm an
 - Brain-mask constraint
 - 12 processing threads
 
-SIFT filtering was applied to improve agreement between streamline densities and the FOD model. The resulting tractogram contained 189,356 streamlines. A 20,000-streamline subset was generated for visualization, and the SIFT-filtered tractogram was converted into a track-density image.
+SIFT filtering was applied to improve agreement between streamline densities and the FOD model. The resulting tractogram contained 189,356 streamlines. An 800-streamline display-only subset is generated for visualization; the full SIFT-filtered tractogram remains the scientific result. The SIFT-filtered tractogram is also converted into a track-density image.
 
 ## Quality control
 
@@ -50,6 +50,7 @@ Quality control included:
 - FA overlay
 - FOD orientation display
 - Whole-brain tractography display
-- Track-density image
 
-The figures were generated automatically with MRview command-line capture options. Automated capture improves reproducibility but does not replace visual inspection.
+The track-density image is retained as a derived scientific output but is not used as a primary static portfolio figure.
+
+The retained figures were generated automatically with MRview command-line capture options. Automated capture improves reproducibility but does not replace visual inspection.

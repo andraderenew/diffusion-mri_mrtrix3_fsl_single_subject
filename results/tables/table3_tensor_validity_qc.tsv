@@ -1,0 +1,7 @@
+criterion	fraction
+fa_gt_1	0.000135043
+md_lt_0	0.0000474475
+ad_lt_0	0.0000109494
+rd_lt_0	0.000142343
+any_invalid	0.000149642
+valid_tensor_fraction	0.999850358

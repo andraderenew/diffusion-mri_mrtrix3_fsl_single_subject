@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-WORK="/media/andraderenew/Elements/neuroimaging/diffusion-mri_mrtrix3_fsl_single_subject"
-RAW="$WORK/data/raw/sub-010142/ses-01/dwi"
-DERIV="$WORK/derivatives"
-REPO="$HOME/github/diffusion-mri_mrtrix3_fsl_single_subject"
-SCRATCH="$HOME/mrtrix_scratch"
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+: "${WORK:?Set WORK to the external DWI work directory}"
+RAW="${RAW:-$WORK/data/raw/sub-010142/ses-01/dwi}"
+DERIV="${DERIV:-$WORK/derivatives}"
+SCRATCH="${SCRATCH:-${TMPDIR:-/tmp}/mrtrix_scratch}"
 
 DWI="$RAW/sub-010142_ses-01_dwi.nii.gz"
 BVAL="$RAW/sub-010142_ses-01_dwi.bval"
@@ -118,8 +118,8 @@ tckmap "$DERIV/tracks_sift.tck" "$DERIV/tdi_sift.mif" \
   -nthreads 12 \
   -force
 
-tckedit "$DERIV/tracks_sift.tck" "$DERIV/tracks_display_20k.tck" \
-  -number 20000 \
+tckedit "$DERIV/tracks_sift.tck" "$DERIV/tracks_display_800.tck" \
+  -number 800 \
   -force
 
 echo "Pipeline completed."

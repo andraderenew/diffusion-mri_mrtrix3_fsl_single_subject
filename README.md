@@ -42,73 +42,75 @@ The acquisition does not contain reverse phase-encoding data. Therefore, preproc
 | Mean RD | 0.000972186 mm²/s |
 | Initial tractogram | 500000 streamlines |
 | SIFT-filtered tractogram | 189356 streamlines |
-| Display tractogram | 20000 streamlines |
+| Display tractogram | 800 streamlines |
 | SIFT μ | 0.0295905 |
 
 Global tensor summaries were calculated inside the whole-brain DWI mask and are descriptive, not normative or diagnostic.
 
+Tensor-validity QC identified 0.0149642% of DWI-mask voxels with FA > 1 and/or negative diffusivity. Excluding these voxels changed each reported mean by less than 0.05%, so the primary descriptive values remain the full-mask results. Detailed QC is provided in `results/tables/table3_tensor_validity_qc.tsv` and `results/tables/table4_dti_sensitivity.tsv`.
+
+During SIFT, the requested termination target was 100,000 streamlines, but the completed run terminated at 189,356 streamlines. The final recorded iteration removed no additional streamlines. The repository therefore reports the actual SIFT output rather than the requested target.
+
 ## Quality-control figures
 
-### EddyQC mean b=0
+### EddyQC mean b0
 
 ![EddyQC mean b0](results/figures/fig1_eddy_qc_avg_b0.png)
 
-### EddyQC mean b=1000
+### EddyQC mean b1000
 
 ![EddyQC mean b1000](results/figures/fig2_eddy_qc_avg_b1000.png)
 
 ### Fractional anisotropy
 
+The final FA figure shows sagittal, coronal, and axial views. FA is displayed as an overlay on the mean b0 image so that anatomical context remains visible outside high-FA regions.
+
 ![FA map](results/figures/fig3_fa_map.png)
 
 ### Fiber orientation distributions
+
+The FOD figure provides an orientation-resolved visualization from the white-matter FOD model.
 
 ![FOD orientation](results/figures/fig4_fod_orientation.png)
 
 ### Whole-brain tractography
 
+The presentation figure uses an 800-streamline display-only subset of the SIFT-filtered tractogram. This subset is used only for visual clarity and does not replace the full SIFT result of 189356 streamlines.
+
 ![Whole-brain tractography](results/figures/fig5_whole_brain_tractography.png)
 
-### Track-density image
-
-![Track-density image](results/figures/fig6_track_density_image.png)
+The track-density image remains a derived output of the scientific workflow but is not included among the primary portfolio figures because the tested static renderings did not add clear visual information beyond the retained tractography and FOD figures.
 
 ## Repository structure
 
 ```text
 .
-├── docs/
-│   ├── METHODS.md
-│   └── RESULTS.md
-├── env/
-│   └── TOOL_VERSIONS.md
-├── reports/
-│   └── eddy_qc_sub-010142.pdf
-├── results/
-│   ├── figures/
-│   └── tables/
-└── scripts/
-    ├── run_dwi_pipeline.sh
-    ├── prepare_dwi_portfolio_outputs.sh
-    └── make_mrview_figures.sh
+|-- docs/
+|   |-- METHODS.md
+|   `-- RESULTS.md
+|-- env/
+|   `-- TOOL_VERSIONS.md
+|-- reports/
+|   `-- eddy_qc_sub-010142.pdf
+|-- results/
+|   |-- figures/
+|   `-- tables/
+`-- scripts/
+    |-- run_dwi_pipeline.sh
+    |-- prepare_dwi_portfolio_outputs.sh
+    `-- make_mrview_figures.sh
 ```
 
 ## Reproduction
 
-Review and adapt the path variables at the beginning of:
+Set `WORK` to the external DWI work directory before running the pipeline. The repository path is detected automatically; `RAW`, `DERIV`, and `SCRATCH` may also be overridden when needed.
 
 ```bash
+export WORK=/path/to/external/dwi-work
 scripts/run_dwi_pipeline.sh
 ```
 
-Then run:
-
-```bash
-chmod +x scripts/run_dwi_pipeline.sh
-./scripts/run_dwi_pipeline.sh
-```
-
-The script expects the raw DWI NIfTI, b-value, b-vector, and JSON files in the external working directory documented in the script.
+Raw DWI NIfTI, b-value, b-vector, and JSON files are expected under the default subject/session layout inside `WORK`, unless `RAW` is explicitly overridden.
 
 ## Limitations
 

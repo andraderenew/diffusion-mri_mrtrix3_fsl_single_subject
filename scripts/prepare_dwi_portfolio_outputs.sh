@@ -1,22 +1,19 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-WORK="/media/andraderenew/Elements/neuroimaging/diffusion-mri_mrtrix3_fsl_single_subject"
-DERIV="$WORK/derivatives"
-REPO="$HOME/github/diffusion-mri_mrtrix3_fsl_single_subject"
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+: "${WORK:?Set WORK to the external DWI work directory}"
+DERIV="${DERIV:-$WORK/derivatives}"
 
 mkdir -p "$REPO/reports" "$REPO/results/figures" "$REPO/results/tables"
 
-if [[ -f "$DERIV/tracks_sift_100k.tck" && ! -f "$DERIV/tracks_sift_189k.tck" ]]; then
-  mv "$DERIV/tracks_sift_100k.tck" "$DERIV/tracks_sift_189k.tck"
-fi
 
-if [[ -f "$DERIV/tdi_sift_100k.mif" && ! -f "$DERIV/tdi_sift_189k.mif" ]]; then
-  mv "$DERIV/tdi_sift_100k.mif" "$DERIV/tdi_sift_189k.mif"
-fi
 
 TRACKS_INITIAL="$DERIV/tracks_500k.tck"
-TRACKS_SIFT="$DERIV/tracks_sift_189k.tck"
+TRACKS_SIFT="${TRACKS_SIFT:-$DERIV/tracks_sift.tck}"
+if [[ ! -f "$TRACKS_SIFT" && -f "$DERIV/tracks_sift_189k.tck" ]]; then
+  TRACKS_SIFT="$DERIV/tracks_sift_189k.tck"
+fi
 
 for file in "$TRACKS_INITIAL" "$TRACKS_SIFT"; do
   if [[ ! -f "$file" ]]; then
@@ -37,7 +34,7 @@ printf '%s\n' \
   $'measure\tvalue' \
   $'initial_streamlines\t'"$INITIAL_COUNT" \
   $'sift_streamlines\t'"$SIFT_COUNT" \
-  $'display_streamlines\t20000' \
+  $'display_streamlines\t800' \
   $'sift_mu\t'"$SIFT_MU" \
   $'algorithm\tiFOD2' \
   $'minimum_length_mm\t10' \
