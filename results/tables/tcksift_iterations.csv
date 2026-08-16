@@ -1,4 +1,4 @@
-# tcksift /media/andraderenew/Elements/neuroimaging/diffusion-mri_mrtrix3_fsl_single_subject/derivatives/tracks_500k.tck /media/andraderenew/Elements/neuroimaging/diffusion-mri_mrtrix3_fsl_single_subject/derivatives/wm_fod.mif /media/andraderenew/Elements/neuroimaging/diffusion-mri_mrtrix3_fsl_single_subject/derivatives/tracks_sift_100k.tck -term_number 100000 -csv /home/andraderenew/github/diffusion-mri_mrtrix3_fsl_single_subject/results/tables/tcksift_iterations.csv -out_mu /home/andraderenew/github/diffusion-mri_mrtrix3_fsl_single_subject/results/tables/tcksift_mu.txt -nthreads 12 -force  (version=3.0.3)
+# tcksift <WORK>/derivatives/tracks_500k.tck <WORK>/derivatives/wm_fod.mif <WORK>/derivatives/tracks_sift_100k.tck -term_number 100000 -csv <REPO>/results/tables/tcksift_iterations.csv -out_mu <REPO>/results/tables/tcksift_mu.txt -nthreads 12 -force  (version=3.0.3)
 #Iteration,Removed this iteration,Total removed,Remaining,Cost,TD,Mu,Recalculation,
 0,0,0,500000,51544.32962719482,35516811.391879849,0.0078805090237292,Start,
 1,808,808,499192,50571.078949214869,35424189.634971432,0.0079011137742861434,Non-linearity,

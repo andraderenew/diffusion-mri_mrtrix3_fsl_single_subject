@@ -1,113 +1,152 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-WORK="/media/andraderenew/Elements/neuroimaging/diffusion-mri_mrtrix3_fsl_single_subject"
-DERIV="$WORK/derivatives"
-REPO="$HOME/github/diffusion-mri_mrtrix3_fsl_single_subject"
-OUT="$REPO/results/figures"
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+: "${WORK:?Set WORK to the external DWI work directory}"
+
+DERIV="${DERIV:-$WORK/derivatives}"
+OUT="${OUT:-$REPO/results/figures}"
 TMP="$OUT/.mrview_capture_tmp"
 
 mkdir -p "$OUT" "$TMP"
-rm -f "$TMP"/*.png 2>/dev/null || true
+rm -f "$TMP"/*.png "$TMP"/*.tck 2>/dev/null || true
 
 required=(
   "$DERIV/mean_b0.mif"
   "$DERIV/fa.mif"
   "$DERIV/wm_fod.mif"
-  "$DERIV/tracks_display_20k.tck"
 )
 
 for file in "${required[@]}"; do
   if [[ ! -f "$file" ]]; then
-    echo "ERROR: falta el archivo:"
+    echo "ERROR: missing required file:"
     echo "  $file"
     exit 1
   fi
 done
 
-if [[ -f "$DERIV/tdi_sift_189k.mif" ]]; then
-  TDI="$DERIV/tdi_sift_189k.mif"
-elif [[ -f "$DERIV/tdi_sift_100k.mif" ]]; then
-  TDI="$DERIV/tdi_sift_100k.mif"
-else
-  echo "ERROR: no encuentro la imagen TDI."
+TRACKS_SIFT="${TRACKS_SIFT:-$DERIV/tracks_sift.tck}"
+
+if [[ ! -f "$TRACKS_SIFT" && -f "$DERIV/tracks_sift_189k.tck" ]]; then
+  TRACKS_SIFT="$DERIV/tracks_sift_189k.tck"
+fi
+
+if [[ ! -f "$TRACKS_SIFT" ]]; then
+  echo "ERROR: SIFT tractogram not found"
   exit 1
 fi
 
-capture() {
-  local prefix="$1"
-  local destination="$2"
-  shift 2
+echo "=== Figure 3: three-view FA on mean-b0 anatomy ==="
 
-  rm -f "$TMP/${prefix}"*.png 2>/dev/null || true
+rm -f "$TMP"/fa_*.png 2>/dev/null || true
 
-  mrview "$@" \
-    -size 1200,900 \
-    -capture.folder "$TMP" \
-    -capture.prefix "$prefix" \
-    -capture.grab \
-    -exit
-
-  sleep 2
-
-  local captured
-  captured="$(find "$TMP" -maxdepth 1 -type f -name "${prefix}*.png" -print -quit)"
-
-  if [[ -z "$captured" ]]; then
-    echo "ERROR: mrview no generó $destination"
-    exit 1
-  fi
-
-  mv -f "$captured" "$OUT/$destination"
-  echo "OK: $OUT/$destination"
-}
-
-echo "=== Figura 3: mapa FA ==="
-capture \
-  "fa_" \
-  "fig3_fa_map.png" \
-  "$DERIV/mean_b0.mif" \
-  -plane 2 \
+mrview "$DERIV/mean_b0.mif" \
   -voxel 64,64,44 \
+  -fov 170 \
+  -focus 0 \
+  -noannotations \
+  -size 1000,1000 \
   -overlay.load "$DERIV/fa.mif" \
   -overlay.opacity 0.70 \
   -overlay.intensity 0,0.8 \
-  -overlay.threshold_min 0.15
+  -overlay.threshold_min 0.15 \
+  -capture.folder "$TMP" \
+  -capture.prefix fa_ \
+  -plane 0 \
+  -capture.grab \
+  -plane 1 \
+  -capture.grab \
+  -plane 2 \
+  -capture.grab \
+  -exit
 
-echo "=== Figura 4: orientaciones FOD ==="
-capture \
-  "fod_" \
-  "fig4_fod_orientation.png" \
-  "$DERIV/mean_b0.mif" \
+sleep 3
+
+FA1="$(find "$TMP" -maxdepth 1 -type f -name "fa_*.png" | sort | sed -n "1p")"
+FA2="$(find "$TMP" -maxdepth 1 -type f -name "fa_*.png" | sort | sed -n "2p")"
+FA3="$(find "$TMP" -maxdepth 1 -type f -name "fa_*.png" | sort | sed -n "3p")"
+
+if [[ -z "$FA1" || -z "$FA2" || -z "$FA3" ]]; then
+  echo "ERROR: incomplete FA captures"
+  exit 1
+fi
+
+python3 -c "from PIL import Image; ims=[Image.open(p).convert(\"RGB\") for p in [\"$FA1\",\"$FA2\",\"$FA3\"]]; W=sum(i.width for i in ims); H=max(i.height for i in ims); out=Image.new(\"RGB\",(W,H)); x=0; [(out.paste(im,(sum(j.width for j in ims[:k]),0))) for k,im in enumerate(ims)]; out.save(\"$OUT/fig3_fa_map.png\")"
+
+echo "OK: $OUT/fig3_fa_map.png"
+
+echo "=== Figure 4: FOD orientation ==="
+
+rm -f "$TMP"/fod_*.png 2>/dev/null || true
+
+mrview "$DERIV/mean_b0.mif" \
   -plane 2 \
   -voxel 64,64,55 \
-  -odf.load_sh "$DERIV/wm_fod.mif"
+  -fov 95 \
+  -focus 0 \
+  -noannotations \
+  -size 900,900 \
+  -odf.load_sh "$DERIV/wm_fod.mif" \
+  -capture.folder "$TMP" \
+  -capture.prefix fod_ \
+  -capture.grab \
+  -exit
 
-echo "=== Figura 5: tractografía ==="
-capture \
-  "tracks_" \
-  "fig5_whole_brain_tractography.png" \
-  "$DERIV/mean_b0.mif" \
+sleep 2
+
+FOD="$(find "$TMP" -maxdepth 1 -type f -name "fod_*.png" | sort | head -n 1)"
+
+if [[ -z "$FOD" ]]; then
+  echo "ERROR: FOD capture not generated"
+  exit 1
+fi
+
+cp -f "$FOD" "$OUT/fig4_fod_orientation.png"
+
+echo "OK: $OUT/fig4_fod_orientation.png"
+
+echo "=== Figure 5: 800-streamline display subset ==="
+
+tckedit \
+  "$TRACKS_SIFT" \
+  "$TMP/tracks_display_800.tck" \
+  -number 800 \
+  -force
+
+rm -f "$TMP"/tracks_*.png 2>/dev/null || true
+
+mrview "$DERIV/mean_b0.mif" \
   -mode 3 \
   -imagevisible 0 \
-  -tractography.load "$DERIV/tracks_display_20k.tck"
+  -fov 185 \
+  -focus 0 \
+  -noannotations \
+  -size 1200,1000 \
+  -tractography.load "$TMP/tracks_display_800.tck" \
+  -tractography.geometry lines \
+  -tractography.thickness -0.7 \
+  -tractography.opacity 0.70 \
+  -capture.folder "$TMP" \
+  -capture.prefix tracks_ \
+  -capture.grab \
+  -exit
 
-echo "=== Figura 6: densidad de tractos ==="
-capture \
-  "tdi_" \
-  "fig6_track_density_image.png" \
-  "$DERIV/mean_b0.mif" \
-  -plane 2 \
-  -voxel 64,64,44 \
-  -overlay.load "$TDI" \
-  -overlay.opacity 0.80
+sleep 3
+
+TRACKS="$(find "$TMP" -maxdepth 1 -type f -name "tracks_*.png" | sort | head -n 1)"
+
+if [[ -z "$TRACKS" ]]; then
+  echo "ERROR: tractography capture not generated"
+  exit 1
+fi
+
+cp -f "$TRACKS" "$OUT/fig5_whole_brain_tractography.png"
 
 rm -rf "$TMP"
 
 echo
-echo "=== Capturas terminadas ==="
+echo "=== Final presentation figures generated ==="
 ls -lh \
   "$OUT/fig3_fa_map.png" \
   "$OUT/fig4_fod_orientation.png" \
-  "$OUT/fig5_whole_brain_tractography.png" \
-  "$OUT/fig6_track_density_image.png"
+  "$OUT/fig5_whole_brain_tractography.png"

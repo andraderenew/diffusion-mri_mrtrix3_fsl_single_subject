@@ -60,7 +60,7 @@ Complete reproducible single-subject diffusion MRI workflow using MRtrix3 and FS
 
 - Initial tractogram: 500,000 streamlines
 - SIFT-filtered tractogram: 189,356 streamlines
-- Visualization subset: 20,000 streamlines
+- Visualization subset: 800 streamlines (display only)
 - SIFT μ: 0.0295905
 
 ### Important limitation
