@@ -7,8 +7,8 @@
     }
   ],
   "title": "Diffusion MRI: MRtrix3 and FSL single-subject workflow",
-  "description": "Reproducible single-subject diffusion MRI workflow combining MRtrix3 and FSL for preprocessing, tensor metrics, constrained spherical deconvolution, tractography, SIFT filtering, quantitative summaries, and visual quality control.",
-  "version": "1.0.2",
+  "description": "Audited single-subject diffusion MRI workflow combining MRtrix3 and FSL for preprocessing, diffusion tensor metrics, constrained spherical deconvolution, tractography, SIFT filtering, quantitative summaries, and visual quality control.",
+  "version": "1.0.3",
   "upload_type": "software",
   "access_right": "open",
   "license": "mit",
@@ -22,7 +22,7 @@
     "constrained spherical deconvolution",
     "neuroimaging"
   ],
-  "notes": "Completed reproducible neuroimaging portfolio workflow.",
+  "notes": "Audited portfolio release. Public quantitative results, tensor-validity sensitivity checks, SIFT termination behaviour, processing provenance, scripts, and primary QC figures were reviewed. The completed SIFT output contains 189356 streamlines despite a requested 100000 target. The acquisition lacks reverse phase-encoding data, so TOPUP susceptibility correction was not possible. Results are descriptive single-subject outputs and tractography is not interpreted as direct anatomical connectivity.",
   "related_identifiers": [
     {
       "identifier": "https://github.com/andraderenew/diffusion-mri_mrtrix3_fsl_single_subject",
