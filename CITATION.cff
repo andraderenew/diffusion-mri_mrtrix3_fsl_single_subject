@@ -12,6 +12,7 @@ repository-code: "https://github.com/andraderenew/diffusion-mri_mrtrix3_fsl_sing
 url: "https://github.com/andraderenew/diffusion-mri_mrtrix3_fsl_single_subject"
 version: "1.0.3"
 date-released: "2026-08-21"
+doi: "10.5281/zenodo.22041919"
 keywords:
   - "diffusion MRI"
   - "DTI"
